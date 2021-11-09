@@ -7,7 +7,8 @@
 #include "TriggerGate.generated.h"
 
 class AUnit;
-
+class ASomeGameMode;
+class ASomeGameState;
 UCLASS()
 class TASK16_API ATriggerGate : public ATriggerBox
 {
@@ -18,8 +19,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AUnit> UnitTD;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 Health = 5;
+
+	ASomeGameMode* SomeGameMode;
+	ASomeGameState* SomeGameState;
 
 protected:
 	virtual void BeginPlay() override;

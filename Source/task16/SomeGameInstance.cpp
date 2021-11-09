@@ -15,3 +15,8 @@ void USomeGameInstance::Loose()
 {
 	LooseCount++;
 }
+
+int32 USomeGameInstance::GetLooseCount()
+{
+	return LooseCount;
+}

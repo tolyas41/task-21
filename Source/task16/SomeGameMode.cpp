@@ -2,9 +2,3 @@
 
 
 #include "SomeGameMode.h"
-
-void ASomeGameMode::BeginPlay()
-{
-	Super::BeginPlay();
-}
-

@@ -5,6 +5,8 @@
 #include "SomeGameMode.h"
 #include "Unit.h"
 #include "SomeGameInstance.h"
+#include "SomeGameMode.h"
+#include "SomeGameState.h"
 
 ATriggerGate::ATriggerGate()
 {
@@ -14,16 +16,24 @@ ATriggerGate::ATriggerGate()
 void ATriggerGate::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UWorld* TheWorld = GetWorld();
+	if (TheWorld != nullptr)
+	{
+		AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
+		SomeGameMode = Cast<ASomeGameMode>(GameMode);
+		SomeGameState = SomeGameMode->GetGameState<ASomeGameState>();
+	}
 }
 
 void ATriggerGate::OnOverlap(class AActor* OverlappedActor, class AActor* OtherActor)
 {
 	if (OtherActor->GetClass() == UnitTD)
 	{
-		Health--;
+		SomeGameState->LooseHealth();
 		OtherActor->Destroy();
 	}
-	if (Health == 0 || OtherActor == UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
+	if (SomeGameState->GetHealth() == 0 || OtherActor == UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
 	{
 		if (UGameplayStatics::GetCurrentLevelName(this) == "NewMap")
 		{
@@ -32,8 +42,8 @@ void ATriggerGate::OnOverlap(class AActor* OverlappedActor, class AActor* OtherA
 		if (UGameplayStatics::GetCurrentLevelName(this) == "TowerDefence")
 		{
 			UGameplayStatics::OpenLevel(this, "NewMap", false);
+			
+			Cast<USomeGameInstance>(GetGameInstance())->OnMapOpen.Broadcast();
 		}
-
-		Cast<USomeGameInstance>(GetGameInstance())->OnMapOpen.Broadcast();
 	}
 }

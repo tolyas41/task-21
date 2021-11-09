@@ -20,6 +20,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 LooseCount;
 
+	UFUNCTION()
+	int32 GetLooseCount();
+
 private:
 	UFUNCTION()
 	void Loose();
