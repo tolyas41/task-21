@@ -23,10 +23,17 @@ void ATriggerGate::OnOverlap(class AActor* OverlappedActor, class AActor* OtherA
 		Health--;
 		OtherActor->Destroy();
 	}
-	if (Health == 0)
+	if (Health == 0 || OtherActor == UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
 	{
-		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+		if (UGameplayStatics::GetCurrentLevelName(this) == "NewMap")
+		{
+			UGameplayStatics::OpenLevel(this, "TowerDefence", false);
+		}
+		if (UGameplayStatics::GetCurrentLevelName(this) == "TowerDefence")
+		{
+			UGameplayStatics::OpenLevel(this, "NewMap", false);
+		}
+
 		Cast<USomeGameInstance>(GetGameInstance())->OnMapOpen.Broadcast();
-		//UGameplayStatics::OpenLevel(this, "NewMap", false);
 	}
 }
