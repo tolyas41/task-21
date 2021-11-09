@@ -15,12 +15,6 @@ ATower::ATower()
 void ATower::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//if (ProjectileClass) 
-	//{
-	//	FTimerHandle FireTimerHandle;
-	//	GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ATower::Fire, 0.5f, true, 2.0f);
-	//}
 }
 
 void ATower::PostActorCreated()

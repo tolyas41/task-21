@@ -16,7 +16,7 @@ void ASomeFactory::BeginPlay()
 {
 	Super::BeginPlay();
 	FTimerHandle MemberTimerHandle;
-	GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &ASomeFactory::SpawnUnit, 1.5f, true, 5.0f);
+	GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &ASomeFactory::SpawnUnit, 1.5f, true, 1.0f);
 }
 
 void ASomeFactory::Tick(float DeltaTime)
