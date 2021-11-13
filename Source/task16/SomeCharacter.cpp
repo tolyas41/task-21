@@ -3,6 +3,7 @@
 
 #include "SomeCharacter.h"
 #include "SomeGameMode.h"
+#include "SomeGameInstance.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Projectile.h"
@@ -39,11 +40,13 @@ void ASomeCharacter::BeginPlay()
 	{
 		AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
 		ASomeGameMode* SomeGameMode = Cast<ASomeGameMode>(GameMode);
-		SomeGameMode->OnDeathUnitEvent.AddUFunction(this, FName("Heal"), HealPower);
+		SomeGameMode->OnDeathUnitEvent.AddUFunction(this, FName("GainExperience"), ExperienceRate);
 	}
 
 	CheckAttack();
 	CheckProjectile();
+
+	Experience = Cast<USomeGameInstance>(GetGameInstance())->GetPlayerExperience();
 }
 
 void ASomeCharacter::Tick(float DeltaTime)
@@ -91,15 +94,9 @@ void ASomeCharacter::OnDamage(UPrimitiveComponent* HitComponent, AActor* OtherAc
 	}
 }
 
-void ASomeCharacter::Heal(float HealAmount)
+void ASomeCharacter::GainExperience(float ExpGain)
 {
-	if (Health < 100)
-	{
-		Health += FMath::Min(100 - Health, HealAmount);
-#if UE_BUILD_DEVELOPMENT
-		UE_LOG(LogTemp, Warning, TEXT("Char's health left (+) %f"), Health);
-#endif
-	}
+	Experience += ExpGain;
 }
 
 void ASomeCharacter::StopAnimation()

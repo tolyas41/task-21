@@ -38,7 +38,7 @@ public:
 	UFUNCTION()
 	virtual void OnDamage(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) override;
 	UFUNCTION()
-	void Heal(float HealAmount);
+	void GainExperience(float ExpGain);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage Causer")
 	TSubclassOf<AProjectile> ProjectileClass;
@@ -63,8 +63,10 @@ public:
 	float MoveSpeed = 500.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move")
 	float RotateSpeed = 5.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Healing")
-	float HealPower = 8.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Exp")
+	float Experience = 0.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Exp")
+	float ExperienceRate = 40.0f;
 
 	FHealEvent OnHealEvent;
 	FTimerHandle AttackCooldownHandle;

@@ -18,4 +18,15 @@ public:
 	FOnDamageEvent OnDamageEvent;
 	FOnDeathUnitEvent OnDeathUnitEvent;
 
+	UFUNCTION(BlueprintCallable)
+	void ChangeWidget(TSubclassOf<UUserWidget> NewWidgetClass);
+
+protected:
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UUserWidget> ExperienceBar;
+
+	UPROPERTY()
+	UUserWidget* CurrentWidget;
 };

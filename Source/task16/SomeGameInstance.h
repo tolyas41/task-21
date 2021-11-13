@@ -7,6 +7,7 @@
 #include "SomeGameInstance.generated.h"
 
 DECLARE_EVENT(USomeGameInstance, FOnLooseEvent)
+DECLARE_EVENT(USomeGameInstance, FTransferParams)
 
 UCLASS()
 class TASK16_API USomeGameInstance : public UGameInstance
@@ -16,14 +17,21 @@ class TASK16_API USomeGameInstance : public UGameInstance
 public:
 	virtual void Init() override;
 
-	FOnLooseEvent OnMapOpen;
+	FOnLooseEvent OnLooseEvent;
+	FTransferParams TransferParams;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 LooseCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float PlayerExperience;
 
 	UFUNCTION()
 	int32 GetLooseCount();
+	UFUNCTION()
+	float GetPlayerExperience();
 
 private:
+	UFUNCTION()
+	void Transfer();
 	UFUNCTION()
 	void Loose();
 };

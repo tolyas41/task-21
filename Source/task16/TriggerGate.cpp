@@ -37,13 +37,14 @@ void ATriggerGate::OnOverlap(class AActor* OverlappedActor, class AActor* OtherA
 	{
 		if (UGameplayStatics::GetCurrentLevelName(this) == "NewMap")
 		{
+			Cast<USomeGameInstance>(GetGameInstance())->TransferParams.Broadcast();
 			UGameplayStatics::OpenLevel(this, "TowerDefence", false);
 		}
 		if (UGameplayStatics::GetCurrentLevelName(this) == "TowerDefence")
 		{
+			Cast<USomeGameInstance>(GetGameInstance())->OnLooseEvent.Broadcast();
+			Cast<USomeGameInstance>(GetGameInstance())->TransferParams.Broadcast();
 			UGameplayStatics::OpenLevel(this, "NewMap", false);
-			
-			Cast<USomeGameInstance>(GetGameInstance())->OnMapOpen.Broadcast();
 		}
 	}
 }
