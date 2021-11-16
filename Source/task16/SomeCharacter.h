@@ -39,6 +39,10 @@ public:
 	virtual void OnDamage(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) override;
 	UFUNCTION()
 	void GainExperience(float ExpGain);
+	UFUNCTION()
+	void Heal(float HealAmount);
+	UFUNCTION()
+	void Decay(float DecayAmount);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage Causer")
 	TSubclassOf<AProjectile> ProjectileClass;
@@ -76,9 +80,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float Health{ 100 };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float HealPower{ 10 };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float DecayRate{ 0.01 };
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hammer")
 	float AttackCooldown = 2.0f;
 	bool IsAbleToBuild = false;
+	bool IsAttackOnCooldown;
 
 private:
 	void CheckProjectile();
@@ -88,5 +97,6 @@ private:
 
 	bool IsReadyToFire;
 	bool IsReadyToAttack;
-	bool IsAttackOnCooldown;
+
+	float DecayDebuff{ 0 };
 };

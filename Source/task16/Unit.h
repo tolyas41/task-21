@@ -13,6 +13,7 @@ class UBoxComponent;
 class AProjectile;
 class AHammerCollider;
 class UAnimationAsset;
+class ASomeCharacter;
 
 UCLASS()
 class TASK16_API AUnit : public ACharacter, public IDamage
@@ -56,6 +57,8 @@ public:
 	void CheckAttack();
 
 private:
+	ASomeCharacter* Player;
 	float Health{ 100 };
 	bool IsReadyToAttack;
+
 };

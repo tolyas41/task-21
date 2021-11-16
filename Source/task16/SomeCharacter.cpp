@@ -41,6 +41,8 @@ void ASomeCharacter::BeginPlay()
 		AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
 		ASomeGameMode* SomeGameMode = Cast<ASomeGameMode>(GameMode);
 		SomeGameMode->OnDeathUnitEvent.AddUFunction(this, FName("GainExperience"), ExperienceRate);
+		SomeGameMode->OnDeathUnitEvent.AddUFunction(this, FName("Heal"), HealPower);
+		SomeGameMode->OnSpawnEvent.AddUFunction(this, FName("Decay"), DecayRate);
 	}
 
 	CheckAttack();
@@ -52,11 +54,16 @@ void ASomeCharacter::BeginPlay()
 void ASomeCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (DecayDebuff > 0 && Health > 0)
+	{
+		Health -= DecayDebuff;
+	}
 }
 
 void ASomeCharacter::Fire()
 {
-	if (IsReadyToFire && !IsAttackOnCooldown)
+	if (IsReadyToFire && !IsAttackOnCooldown && Health > 0)
 	{
 		IsAttackOnCooldown = true;
 		PlayAnimMontage(FireAttackAnimation);
@@ -69,7 +76,7 @@ void ASomeCharacter::Fire()
 
 void ASomeCharacter::Attack()
 {
-	if (IsReadyToAttack && !IsAttackOnCooldown)
+	if (IsReadyToAttack && !IsAttackOnCooldown && Health > 0)
 	{
 		IsAttackOnCooldown = true;
 		PlayAnimMontage(HammerAttackAnimation);
@@ -91,6 +98,23 @@ void ASomeCharacter::OnDamage(UPrimitiveComponent* HitComponent, AActor* OtherAc
 	if (Health == 0)
 	{
 		Destroy();
+	}
+}
+
+void ASomeCharacter::Decay(float DecayAmount)
+{
+	DecayDebuff += DecayAmount;
+}
+
+void ASomeCharacter::Heal(float HealAmount)
+{
+	DecayDebuff -= DecayRate;
+	if (Health < 100)
+	{
+		Health += FMath::Min(100 - Health, HealAmount);
+#if UE_BUILD_DEVELOPMENT
+		UE_LOG(LogTemp, Warning, TEXT("Char's health left (+) %f"), Health);
+#endif
 	}
 }
 

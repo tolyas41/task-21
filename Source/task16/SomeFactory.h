@@ -7,7 +7,7 @@
 #include "SomeFactory.generated.h"
 
 class AUnit;
-DECLARE_EVENT(ASomeFactory, FOnSpawnEvent)
+class ASomeGameMode;
 
 UCLASS()
 class TASK16_API ASomeFactory : public AActor
@@ -28,9 +28,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Spawn")
 	FVector SpawnLocation;
 
+	ASomeGameMode* SomeGameMode;
+
 	UFUNCTION()
 	void SpawnUnit();
 
-	FOnSpawnEvent OnSpawnEvent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn")
+	float SpawnRate{ 1.0f };
 
 };

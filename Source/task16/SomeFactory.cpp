@@ -16,7 +16,10 @@ void ASomeFactory::BeginPlay()
 {
 	Super::BeginPlay();
 	FTimerHandle MemberTimerHandle;
-	GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &ASomeFactory::SpawnUnit, 1.5f, true, 1.0f);
+	GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &ASomeFactory::SpawnUnit, SpawnRate, true, 1.0f);
+
+	SomeGameMode = Cast<ASomeGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+
 }
 
 void ASomeFactory::Tick(float DeltaTime)
@@ -26,6 +29,8 @@ void ASomeFactory::Tick(float DeltaTime)
 
 void ASomeFactory::SpawnUnit()
 {
-	SpawnLocation = GetActorLocation() + FVector(FMath::RandRange(-8.0f, 8.0f), FMath::RandRange(-8.0f, 8.0f), 0);
+	SpawnLocation = GetActorLocation();
 	GetWorld()->SpawnActor<AUnit>(UnitToSpawn, SpawnLocation, FRotator(0, 225.0f, 0));
+	SomeGameMode->OnSpawnEvent.Broadcast();
+
 }

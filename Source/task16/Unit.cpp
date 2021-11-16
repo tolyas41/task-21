@@ -3,6 +3,7 @@
 
 #include "Unit.h"
 #include "SomeGameMode.h"
+#include "SomeCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Damage.h"
@@ -23,6 +24,8 @@ void AUnit::BeginPlay()
 {
 	Super::BeginPlay();
 	CheckAttack();
+
+	Player = Cast<ASomeCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 }
 
 void AUnit::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -50,7 +53,7 @@ void AUnit::Tick(float DeltaTime)
 
 void AUnit::OnDamage(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (OtherActor->GetClass() == HammerClass || OtherActor->GetClass() == CharProjectileClass)
+	if ((OtherActor->GetClass() == HammerClass && Player->IsAttackOnCooldown) || OtherActor->GetClass() == CharProjectileClass)
 	{
 		DamageToApply = FMath::Min(Health, DamageToApply);
 		Health -= DamageToApply;

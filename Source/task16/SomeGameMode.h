@@ -8,6 +8,7 @@
 
 DECLARE_EVENT(ASomeGameMode, FOnDamageEvent)
 DECLARE_EVENT(ASomeGameMode, FOnDeathUnitEvent)
+DECLARE_EVENT(ASomeGameMode, FOnSpawnEvent)
 
 UCLASS()
 class TASK16_API ASomeGameMode : public AGameModeBase
@@ -17,6 +18,7 @@ class TASK16_API ASomeGameMode : public AGameModeBase
 public:
 	FOnDamageEvent OnDamageEvent;
 	FOnDeathUnitEvent OnDeathUnitEvent;
+	FOnSpawnEvent OnSpawnEvent;
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeWidget(TSubclassOf<UUserWidget> NewWidgetClass);
