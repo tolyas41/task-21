@@ -28,8 +28,10 @@ private:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tower To Build")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tower")
 	TSubclassOf<ATower> TowerClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tower")
+	int32 TowerCost = 5;
 
 	void Rotate(float Value);
 	void MoveForward(float Value);

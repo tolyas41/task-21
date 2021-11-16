@@ -16,7 +16,7 @@ class UAnimationAsset;
 DECLARE_EVENT(ASomeCharacter, FHealEvent)
 
 UCLASS()
-class TASK16_API ASomeCharacter : public ACharacter, public IDamage
+class TASK16_API ASomeCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -36,13 +36,9 @@ public:
 	UFUNCTION()
 	void Attack();
 	UFUNCTION()
-	virtual void OnDamage(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) override;
-	UFUNCTION()
 	void GainExperience(float ExpGain);
 	UFUNCTION()
-	void Heal(float HealAmount);
-	UFUNCTION()
-	void Decay(float DecayAmount);
+	void GainGold(int32 GoldAmount);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage Causer")
 	TSubclassOf<AProjectile> ProjectileClass;
@@ -68,9 +64,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move")
 	float RotateSpeed = 5.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Exp")
+	int32 Level = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Exp")
+	float ExperienceToLevelUp = 100.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Exp")
 	float Experience = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Exp")
-	float ExperienceRate = 40.0f;
+	float ExperienceRate = 10.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gold")
+	int32 Gold = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gold")
+	int32 GoldRate = 2;
 
 	FHealEvent OnHealEvent;
 	FTimerHandle AttackCooldownHandle;
@@ -78,12 +82,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Damage")
 	float DamageToApply = 15.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	float Health{ 100 };
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	float HealPower{ 10 };
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	float DecayRate{ 0.01 };
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hammer")
 	float AttackCooldown = 2.0f;
 	bool IsAbleToBuild = false;
@@ -97,6 +95,4 @@ private:
 
 	bool IsReadyToFire;
 	bool IsReadyToAttack;
-
-	float DecayDebuff{ 0 };
 };

@@ -24,7 +24,6 @@ void ASomeCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ASomeCharacter::OnDamage);
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	if (HammerClass)
 	{
@@ -41,29 +40,26 @@ void ASomeCharacter::BeginPlay()
 		AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
 		ASomeGameMode* SomeGameMode = Cast<ASomeGameMode>(GameMode);
 		SomeGameMode->OnDeathUnitEvent.AddUFunction(this, FName("GainExperience"), ExperienceRate);
-		SomeGameMode->OnDeathUnitEvent.AddUFunction(this, FName("Heal"), HealPower);
-		SomeGameMode->OnSpawnEvent.AddUFunction(this, FName("Decay"), DecayRate);
+		SomeGameMode->OnDeathUnitEvent.AddUFunction(this, FName("GainGold"), GoldRate);
 	}
 
 	CheckAttack();
 	CheckProjectile();
 
 	Experience = Cast<USomeGameInstance>(GetGameInstance())->GetPlayerExperience();
+	Level = Cast<USomeGameInstance>(GetGameInstance())->GetPlayerLevel();
+	Gold = Cast<USomeGameInstance>(GetGameInstance())->GetPlayerGold();
+	
 }
 
 void ASomeCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (DecayDebuff > 0 && Health > 0)
-	{
-		Health -= DecayDebuff;
-	}
 }
 
 void ASomeCharacter::Fire()
 {
-	if (IsReadyToFire && !IsAttackOnCooldown && Health > 0)
+	if (IsReadyToFire && !IsAttackOnCooldown)
 	{
 		IsAttackOnCooldown = true;
 		PlayAnimMontage(FireAttackAnimation);
@@ -76,51 +72,29 @@ void ASomeCharacter::Fire()
 
 void ASomeCharacter::Attack()
 {
-	if (IsReadyToAttack && !IsAttackOnCooldown && Health > 0)
+
+	if (IsReadyToAttack && !IsAttackOnCooldown)
 	{
+		HammerCollider->SetActorEnableCollision(true);
 		IsAttackOnCooldown = true;
 		PlayAnimMontage(HammerAttackAnimation);
 	}
 	Cooldown();
 }
 
-void ASomeCharacter::OnDamage(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
-{
-	if (OtherActor->GetClass() == ProjectileClass)
-	{
-		DamageToApply = FMath::Min(Health, DamageToApply);
-		Health -= DamageToApply;
-#if UE_BUILD_DEVELOPMENT
-		UE_LOG(LogTemp, Warning, TEXT("Health left %f"), Health);
-#endif
-		OtherActor->Destroy();
-	}
-	if (Health == 0)
-	{
-		Destroy();
-	}
-}
-
-void ASomeCharacter::Decay(float DecayAmount)
-{
-	DecayDebuff += DecayAmount;
-}
-
-void ASomeCharacter::Heal(float HealAmount)
-{
-	DecayDebuff -= DecayRate;
-	if (Health < 100)
-	{
-		Health += FMath::Min(100 - Health, HealAmount);
-#if UE_BUILD_DEVELOPMENT
-		UE_LOG(LogTemp, Warning, TEXT("Char's health left (+) %f"), Health);
-#endif
-	}
-}
-
 void ASomeCharacter::GainExperience(float ExpGain)
 {
 	Experience += ExpGain;
+	if (Experience == (ExperienceToLevelUp + Level * ExpGain))
+	{
+		Level++;
+		Experience = 0.0f;
+	}
+}
+
+void ASomeCharacter::GainGold(int32 GoldAmount)
+{
+	Gold += GoldAmount;
 }
 
 void ASomeCharacter::StopAnimation()

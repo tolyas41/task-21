@@ -23,11 +23,19 @@ public:
 	int32 LooseCount;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float PlayerExperience;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 PlayerLevel;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 PlayerGold;
 
 	UFUNCTION()
 	int32 GetLooseCount();
 	UFUNCTION()
 	float GetPlayerExperience();
+	UFUNCTION()
+	int32 GetPlayerLevel();
+	UFUNCTION()
+	int32 GetPlayerGold();
 
 private:
 	UFUNCTION()

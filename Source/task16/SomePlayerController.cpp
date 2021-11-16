@@ -82,8 +82,9 @@ void ASomePlayerController::Attack()
 
 void ASomePlayerController::BuildTower()
 {
-	if (Character->IsAbleToBuild)
+	if (Character->IsAbleToBuild && Character->Gold >= TowerCost)
 	{
+		Character->Gold -= TowerCost;
 		Character->PlayAnimMontage(Character->HammerAttackAnimation);
 		SpawnLocation = Character->GetActorLocation() + Character->GetActorForwardVector() * 10 + FVector(0, 0, 120.0f);
 		GetWorld()->SpawnActor<ATower>(TowerClass, SpawnLocation, FRotator(0, 0, 0));
