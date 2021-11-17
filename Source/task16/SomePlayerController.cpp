@@ -5,6 +5,7 @@
 #include "SomeCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Tower.h"
+#include "Grabber.h"
 
 ASomePlayerController::ASomePlayerController()
 {
@@ -41,7 +42,8 @@ void ASomePlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Rotate", this, &ASomePlayerController::Rotate);
 	InputComponent->BindAxis("MoveForward", this, &ASomePlayerController::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &ASomePlayerController::MoveRight);
-	InputComponent->BindAction("Fire", IE_Pressed, this, &ASomePlayerController::Fire);
+	InputComponent->BindAction("Grab", IE_Pressed, this, &ASomePlayerController::Grab);
+	InputComponent->BindAction("Grab", IE_Released, this, &ASomePlayerController::Release);
 	InputComponent->BindAction("Attack", IE_Pressed, this, &ASomePlayerController::Attack);
 	InputComponent->BindAction("BuildTower", IE_Pressed, this, &ASomePlayerController::BuildTower);
 }
@@ -89,4 +91,14 @@ void ASomePlayerController::BuildTower()
 		SpawnLocation = Character->GetActorLocation() + Character->GetActorForwardVector() * 10 + FVector(0, 0, 120.0f);
 		GetWorld()->SpawnActor<ATower>(TowerClass, SpawnLocation, FRotator(0, 0, 0));
 	}
+}
+
+void ASomePlayerController::Grab()
+{
+	Character->FindComponentByClass<UGrabber>()->Grab();
+}
+
+void ASomePlayerController::Release()
+{
+	Character->FindComponentByClass<UGrabber>()->Release();
 }

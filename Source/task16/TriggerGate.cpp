@@ -7,6 +7,8 @@
 #include "SomeGameInstance.h"
 #include "SomeGameMode.h"
 #include "SomeGameState.h"
+#include "SomeItem.h"
+#include "SomeCharacter.h"
 
 ATriggerGate::ATriggerGate()
 {
@@ -46,5 +48,11 @@ void ATriggerGate::OnOverlap(class AActor* OverlappedActor, class AActor* OtherA
 			Cast<USomeGameInstance>(GetGameInstance())->TransferParams.Broadcast();
 			UGameplayStatics::OpenLevel(this, "NewMap", false);
 		}
+	}
+	if (OtherActor->GetClass() == TreasureItem)
+	{
+		ASomeCharacter* PlayerChar = Cast<ASomeCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		PlayerChar->GainExperience(TreasureExperience);
+		OtherActor->Destroy();
 	}
 }

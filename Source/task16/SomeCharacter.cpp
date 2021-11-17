@@ -85,10 +85,12 @@ void ASomeCharacter::Attack()
 void ASomeCharacter::GainExperience(float ExpGain)
 {
 	Experience += ExpGain;
-	if (Experience == (ExperienceToLevelUp + Level * ExpGain))
+	if (Experience >= (ExperienceToLevelUp))
 	{
-		Level++;
-		Experience = 0.0f;
+		Level += (int32)(Experience / ExperienceToLevelUp);
+		ExperienceToLevelUp = 100.0f + Level * ExpGain;
+		Experience = 0;
+		AttackCooldown = AttackCooldown - Level * 0.05f;
 	}
 }
 

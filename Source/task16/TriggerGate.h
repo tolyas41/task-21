@@ -9,6 +9,7 @@
 class AUnit;
 class ASomeGameMode;
 class ASomeGameState;
+class ASomeItem;
 UCLASS()
 class TASK16_API ATriggerGate : public ATriggerBox
 {
@@ -19,9 +20,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AUnit> UnitTD;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<ASomeItem> TreasureItem;
 
 	ASomeGameMode* SomeGameMode;
 	ASomeGameState* SomeGameState;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float TreasureExperience;
 
 protected:
 	virtual void BeginPlay() override;
