@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "Grabber.h"
 #include "Engine/World.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
-#include "Grabber.h"
 
 UGrabber::UGrabber()
 {
@@ -24,7 +24,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 	if (IsPhysicsHandle && PhysicsHandle->GrabbedComponent)
 	{
-		PhysicsHandle->SetTargetLocation(GetPlayersReach());
+		PhysicsHandle->SetTargetLocation(GetPlayersReach() + FVector(0, 0, LevitateValue));
 	}
 }
 
@@ -39,7 +39,7 @@ void UGrabber::Grab()
 
 		if (Hit.GetActor())
 		{
-			PhysicsHandle->GrabComponentAtLocation(Hit.GetComponent(),	NAME_None, GetPlayersReach());
+			PhysicsHandle->GrabComponentAtLocationWithRotation(Hit.GetComponent(), NAME_None, GetPlayersReach(), FRotator());
 		}
 	}
 }

@@ -34,6 +34,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float Reach = 200.0f;
+	UPROPERTY(EditAnywhere)
+	float LevitateValue = 100.0f;
 
 	bool IsPhysicsHandle;
 };
